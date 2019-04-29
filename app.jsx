@@ -10,8 +10,8 @@ class App extends React.Component {
   render() {
     return (
       <TransitionSlider
-        width='3840'
-        height='2160'
+        width='1280'
+        height='720'
         primaryImage='./left.jpg'
         secondaryImage='./right.jpg'
       />
