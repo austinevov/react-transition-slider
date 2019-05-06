@@ -1,12 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { DEFAULT_ORIGIN } from './TransitionSlider';
 
 export default class Dragger extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      x: 0,
+      x: DEFAULT_ORIGIN,
       isDragging: false
     };
   }
@@ -14,14 +15,14 @@ export default class Dragger extends React.Component {
   componentDidMount = () => {
     window.addEventListener('mousemove', this.handleMouseMove);
 
-    this.props.onSliderChange(this.state.x + 40);
+    this.props.onSliderChange(DEFAULT_ORIGIN);
   };
 
   handleMouseMove = evt => {
     if (this.state.isDragging) {
-      const x = Math.min(this.props.maxRange - 50, Math.max(0, evt.clientX));
+      const x = Math.min(this.props.maxRange - 10, Math.max(0, evt.clientX));
       this.setState({ x }, () => {
-        this.props.onSliderChange(this.state.x + 40);
+        this.props.onSliderChange(this.state.x);
       });
     }
   };
@@ -42,33 +43,77 @@ export default class Dragger extends React.Component {
 
   render() {
     return (
-      <Container x={this.state.x}>
-        <TabContainer
+      <Container
+        style={{ left: `${this.state.x}px` }}
+        onMouseDown={this.startDragging}
+        isDragging={this.state.isDragging}
+      >
+        <TransitionBubble
           onTouchStart={this.startDragging}
           onMouseDown={this.startDragging}
           isDragging={this.state.isDragging}
-        />
-        <Column
+        >
+          <span>VS.</span>
+        </TransitionBubble>
+        {/* <TabContainer
+          onTouchStart={this.startDragging}
           onMouseDown={this.startDragging}
           isDragging={this.state.isDragging}
-        />
+        /> */}
       </Container>
     );
   }
 }
 
-//80
-//40px 20px
-const Container = styled.div`
+const TransitionBubble = styled.div`
   width: 50px;
+  height: 50px;
+  background-color: #db3b34;
+  border-radius: 50%;
+
+  position: absolute;
+  bottom: 20%;
+  left: -20px;
+
+  box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.75);
+
+  ${props =>
+    props.isDragging &&
+    css`
+      pointer-events: none;
+    `}
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  span {
+    cursor: pointer;
+    font-family: 'Pacifico', cursive;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+
+    user-select: none;
+  }
+`;
+
+const Container = styled.div`
+  width: 10px;
   height: 100%;
   position: absolute;
   top: 0px;
+  background-color: beige;
+  cursor: pointer;
 
   ${props =>
-    props.x &&
+    props.isDragging &&
     css`
-      left: ${props.x}px;
+      pointer-events: none;
     `}
 
   display: flex;
@@ -84,21 +129,6 @@ const TabContainer = styled.div`
   position: absolute;
   bottom: 20%;
   left: 0px;
-
-  ${props =>
-    props.isDragging &&
-    css`
-      pointer-events: none;
-    `}
-`;
-
-const Column = styled.div`
-  width: 10px;
-  height: 100%;
-  background-color: beige;
-  right: 0px;
-  top: 0px;
-  position: absolute;
 
   ${props =>
     props.isDragging &&

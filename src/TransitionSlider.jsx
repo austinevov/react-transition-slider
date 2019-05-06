@@ -7,6 +7,8 @@ import fragmentSource from './fragment.glsl';
 import { compileProgram, createTriangle, createTexture } from './webgl';
 import Dragger from './Dragger';
 
+export const DEFAULT_ORIGIN = 50;
+
 export default class TransitionSlider extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +21,21 @@ export default class TransitionSlider extends React.Component {
     height: PropTypes.string
   };
 
+  componentWillUnmount() {
+    this.shouldAnimate = false;
+    this.gl.deleteTexture(this.primaryTexture);
+    this.gl.deleteTexture(this.secondaryTexture);
+    this.gl.deleteProgram(this.program);
+  }
+
   componentDidMount = () => {
     if (this.canvas) {
+      this.shouldAnimate = true;
+      this.canvas.width = this.props.width * 2;
+      this.canvas.height = this.props.height * 2;
+      this.canvas.style.width = `${this.props.width}px`;
+      this.canvas.style.height = `${this.props.height}px`;
+
       this.gl = this.canvas.getContext('webgl', { antialias: true });
       this.gl.clearColor(0, 0, 0, 1);
       this.gl.clear(this.gl.COLOR_BUFFER_BIT);
@@ -30,12 +45,6 @@ export default class TransitionSlider extends React.Component {
 
       this.primaryTexture = createTexture(this.gl, this.props.primaryImage);
       this.secondaryTexture = createTexture(this.gl, this.props.secondaryImage);
-
-      this.gl.useProgram(this.program);
-      this.gl.activeTexture(this.gl.TEXTURE0);
-      this.gl.bindTexture(this.gl.TEXTURE_2D, this.primaryTexture);
-      this.gl.activeTexture(this.gl.TEXTURE1);
-      this.gl.bindTexture(this.gl.TEXTURE_2D, this.secondaryTexture);
 
       this.uniforms = {};
       this.uniforms['u_texture0'] = this.gl.getUniformLocation(
@@ -55,33 +64,40 @@ export default class TransitionSlider extends React.Component {
         'u_sliderX'
       );
 
-      this.gl.uniform1i(this.uniforms.u_texture0, 0);
-      this.gl.uniform1i(this.uniforms.u_texture1, 1);
-      this.gl.uniform2f(
-        this.uniforms.u_resolution,
-        this.props.width,
-        this.props.height
-      );
-      this.gl.uniform1f(this.uniforms.u_sliderX, 0);
-
       this.start = performance.now();
-
-      this.canvas.width = this.props.width;
-      this.canvas.height = this.props.height;
 
       this.animate();
     }
   };
 
   animate = () => {
-    this.gl.viewport(0, 0, this.props.width, this.props.height);
-    this.gl.uniform1f(this.uniforms.u_sliderX, this.delta);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, 3);
-    requestAnimationFrame(this.animate);
+    if (this.shouldAnimate) {
+      this.gl.useProgram(this.program);
+      this.gl.activeTexture(this.gl.TEXTURE0);
+      this.gl.bindTexture(this.gl.TEXTURE_2D, this.primaryTexture);
+      this.gl.activeTexture(this.gl.TEXTURE1);
+      this.gl.bindTexture(this.gl.TEXTURE_2D, this.secondaryTexture);
+
+      this.gl.uniform1i(this.uniforms.u_texture0, 0);
+      this.gl.uniform1i(this.uniforms.u_texture1, 1);
+      this.gl.uniform2f(
+        this.uniforms.u_resolution,
+        this.props.width * 2,
+        this.props.height * 2
+      );
+      this.gl.uniform1f(this.uniforms.u_sliderX, 0);
+
+      this.gl.clearColor(0, 0, 0, 1.0);
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+      this.gl.viewport(0, 0, this.props.width * 2, this.props.height * 2);
+      this.gl.uniform1f(this.uniforms.u_sliderX, this.delta);
+      this.gl.drawArrays(this.gl.TRIANGLES, 0, 3);
+      requestAnimationFrame(this.animate);
+    }
   };
 
   updateSlider = x => {
-    this.delta = x;
+    this.delta = x * 2;
   };
 
   render() {
@@ -104,12 +120,11 @@ export default class TransitionSlider extends React.Component {
   }
 }
 
-const Canvas = styled.canvas`
-  width: 100%;
-  height: 100%;
-`;
+const Canvas = styled.canvas``;
 
 const Container = styled.div`
+  @import url('https://fonts.googleapis.com/css?family=Pacifico');
+
   ${props =>
     props.width &&
     css`
