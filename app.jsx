@@ -74,7 +74,7 @@ class App extends React.Component {
             </BackButton>
             <TransitionSlider
               width={`${window.innerWidth}`}
-              height={`${window.outerWidth * 1.77778}`}
+              height={`${window.innerWidth / 1.77778}`}
               primaryImage={primaryImage}
               secondaryImage={secondaryImage}
             />
