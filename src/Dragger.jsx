@@ -108,6 +108,10 @@ const TransitionBubble = styled.div`
 `;
 
 const Container = styled.div`
+  &,
+  * {
+    touch-action: none;
+  }
   width: 10px;
   height: 100%;
   position: absolute;
