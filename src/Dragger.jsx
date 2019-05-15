@@ -14,13 +14,22 @@ export default class Dragger extends React.Component {
 
   componentDidMount = () => {
     window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('touchmove', this.handleMouseMove);
 
     this.props.onSliderChange(DEFAULT_ORIGIN);
   };
 
   handleMouseMove = evt => {
     if (this.state.isDragging) {
-      const x = Math.min(this.props.maxRange - 10, Math.max(0, evt.clientX));
+      let clientX = 0;
+      if (evt.touches && evt.touches.length > 0) {
+        clientX = evt.touches[0].clientX;
+      } else {
+        clientX = evt.clientX;
+      }
+
+      const x = Math.min(this.props.maxRange - 10, Math.max(0, clientX));
+
       this.setState({ x }, () => {
         this.props.onSliderChange(this.state.x);
       });
@@ -46,6 +55,7 @@ export default class Dragger extends React.Component {
       <Container
         style={{ left: `${this.state.x}px` }}
         onMouseDown={this.startDragging}
+        onTouchStart={this.startDragging}
         isDragging={this.state.isDragging}
       >
         <TransitionBubble
@@ -55,11 +65,6 @@ export default class Dragger extends React.Component {
         >
           <span>VS.</span>
         </TransitionBubble>
-        {/* <TabContainer
-          onTouchStart={this.startDragging}
-          onMouseDown={this.startDragging}
-          isDragging={this.state.isDragging}
-        /> */}
       </Container>
     );
   }
