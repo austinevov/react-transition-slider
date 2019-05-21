@@ -53,6 +53,18 @@ class App extends React.Component {
     this.setState({ isViewingSlider: true, sliderType: 'bathroom' });
   };
 
+  viewBedroom = () => {
+    this.setState({ isViewingSlider: true, sliderType: 'bedroom' });
+  };
+
+  viewModelLiving = () => {
+    this.setState({ isViewingSlider: true, sliderType: 'modelliving' });
+  };
+
+  viewLiving = () => {
+    this.setState({ isViewingSlider: true, sliderType: 'living' });
+  };
+
   constructor() {
     super();
   }
@@ -62,6 +74,15 @@ class App extends React.Component {
     if (this.state.sliderType === 'bathroom') {
       primaryImage = bathroomOptions[this.state.bathroomLeft];
       secondaryImage = bathroomOptions[this.state.bathroomRight];
+    } else if (this.state.sliderType === 'bedroom') {
+      primaryImage = 'bedRight.jpg';
+      secondaryImage = 'bedLeft.jpg';
+    } else if (this.state.sliderType === 'modelliving') {
+      primaryImage = 'modelLivingRight.jpg';
+      secondaryImage = 'modelLivingLeft.jpg';
+    } else if (this.state.sliderType === 'living') {
+      primaryImage = 'livingRoomRight.jpg';
+      secondaryImage = 'livingRoomLeft.jpg';
     }
     return (
       <div>
@@ -100,6 +121,21 @@ class App extends React.Component {
               onLeftChange={this.updateBathroomLeft}
               onRightChange={this.updateBathroomRight}
               onView={() => this.viewBathroom()}
+            />
+            <DropdownCategory
+              name='Bedroom'
+              key='Bedroom'
+              onView={() => this.viewBedroom()}
+            />
+            <DropdownCategory
+              name='ModelLiving'
+              key='Model Living Room'
+              onView={() => this.viewModelLiving()}
+            />
+            <DropdownCategory
+              name='LivingRoom'
+              key='Living Room'
+              onView={() => this.viewLiving()}
             />
           </DropdownList>
         )}
