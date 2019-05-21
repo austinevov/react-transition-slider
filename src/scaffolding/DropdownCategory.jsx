@@ -11,26 +11,28 @@ export default class DropdownCategory extends Component {
         </Tab>
         {this.props.isDropped && (
           <DroppedContainer>
-            <DropdownContainer>
-              <select
-                onChange={evt => this.props.onLeftChange(evt.target.value)}
-              >
-                {Object.keys(this.props.options).map(opt => (
-                  <option value={opt} selected={this.props.left === opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-              <select
-                onChange={evt => this.props.onRightChange(evt.target.value)}
-              >
-                {Object.keys(this.props.options).map(opt => (
-                  <option value={opt} selected={this.props.right === opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            </DropdownContainer>
+            {this.props.options && (
+              <DropdownContainer>
+                <select
+                  onChange={evt => this.props.onLeftChange(evt.target.value)}
+                >
+                  {Object.keys(this.props.options).map(opt => (
+                    <option value={opt} selected={this.props.left === opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  onChange={evt => this.props.onRightChange(evt.target.value)}
+                >
+                  {Object.keys(this.props.options).map(opt => (
+                    <option value={opt} selected={this.props.right === opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </DropdownContainer>
+            )}
             <ViewButton onClick={this.props.onView}>View</ViewButton>
           </DroppedContainer>
         )}

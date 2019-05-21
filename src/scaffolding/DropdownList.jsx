@@ -16,11 +16,22 @@ export default class DropdownList extends Component {
       this.setState({ droppedIndex: 0 });
     } else if (name === 'bathroom') {
       this.setState({ droppedIndex: 1 });
+    } else if (name === 'bedroom' && droppedIndex === 2) {
+      this.setState({ droppedIndex: 1 });
+    } else if (name === 'bedroom') {
+      this.setState({ droppedIndex: 2 });
+    } else if (name === 'modelliving' && droppedIndex === 3) {
+      this.setState({ droppedIndex: 2 });
+    } else if (name === 'modelliving') {
+      this.setState({ droppedIndex: 3 });
+    } else if (name === 'livingroom' && droppedIndex === 4) {
+      this.setState({ droppedIndex: 3 });
+    } else if (name === 'livingroom') {
+      this.setState({ droppedIndex: 4 });
     }
   };
 
   render() {
-    console.log('children', this.props.children);
     return (
       <Container>
         {React.Children.map(this.props.children, (child, index) => {
