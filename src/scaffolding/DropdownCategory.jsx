@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 export default class DropdownCategory extends Component {
   render() {
     return (
-      <Container>
+      <Container gc={this.props.gc} gr={this.props.gr}>
         <Tab onClick={this.props.onDropToggle}>
           <span>{this.props.name}</span>
           <i>{this.props.isDropped ? '▲' : '▼'}</i>
@@ -50,6 +50,7 @@ const ViewButton = styled.button`
   font-family: 'Roboto', sans-serif;
   padding: 8px 15px;
   cursor: pointer;
+  margin-top: 15px;
 `;
 
 const DroppedContainer = styled.div`
@@ -104,8 +105,15 @@ const Tab = styled.div`
 `;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  ${props =>
+    props.gc &&
+    css`
+      grid-column: ${props.gc};
+    `}
+
+  ${props =>
+    props.gr &&
+    css`
+      grid-row: ${props.gr};
+    `}
 `;
