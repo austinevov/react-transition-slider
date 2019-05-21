@@ -25,7 +25,7 @@ class App extends React.Component {
     kitchenRight: 'fluorite',
     bathroomLeft: 'amethyst',
     bathroomRight: 'topaz',
-    isViewingSlider: true,
+    isViewingSlider: false,
     sliderType: 'kitchen'
   };
 
@@ -101,52 +101,75 @@ class App extends React.Component {
             />
           </PreviewContainer>
         ) : (
-          <DropdownList>
-            <DropdownCategory
-              name='Kitchen'
-              key='kitchen'
-              options={kitchenOptions}
-              left={this.state.kitchenLeft}
-              right={this.state.kitchenRight}
-              onLeftChange={this.updateKitchenLeft}
-              onRightChange={this.updateKitchenRight}
-              onView={() => this.viewKitchen()}
-            />
-            <DropdownCategory
-              name='Bathroom'
-              key='bathroom'
-              options={bathroomOptions}
-              left={this.state.bathroomLeft}
-              right={this.state.bathroomRight}
-              onLeftChange={this.updateBathroomLeft}
-              onRightChange={this.updateBathroomRight}
-              onView={() => this.viewBathroom()}
-            />
-            <DropdownCategory
-              name='Bedroom'
-              key='Bedroom'
-              onView={() => this.viewBedroom()}
-            />
-            <DropdownCategory
-              name='ModelLiving'
-              key='Model Living Room'
-              onView={() => this.viewModelLiving()}
-            />
-            <DropdownCategory
-              name='LivingRoom'
-              key='Living Room'
-              onView={() => this.viewLiving()}
-            />
-          </DropdownList>
+          <>
+            <Dropdowns>
+              <DropdownList>
+                <DropdownCategory
+                  name='Kitchen'
+                  key='kitchen'
+                  gc='1/2'
+                  gr='1/2'
+                  options={kitchenOptions}
+                  left={this.state.kitchenLeft}
+                  right={this.state.kitchenRight}
+                  onLeftChange={this.updateKitchenLeft}
+                  onRightChange={this.updateKitchenRight}
+                  onView={() => this.viewKitchen()}
+                />
+                <DropdownCategory
+                  name='Bathroom'
+                  key='bathroom'
+                  gc='1/2'
+                  gr='2/3'
+                  options={bathroomOptions}
+                  left={this.state.bathroomLeft}
+                  right={this.state.bathroomRight}
+                  onLeftChange={this.updateBathroomLeft}
+                  onRightChange={this.updateBathroomRight}
+                  onView={() => this.viewBathroom()}
+                />
+              </DropdownList>
+              <DropdownList>
+                <DropdownCategory
+                  name='Finish Staging (Bedroom)'
+                  key='Bedroom'
+                  gc='2/3'
+                  gr='1/2'
+                  onView={() => this.viewBedroom()}
+                />
+                <DropdownCategory
+                  name='Finish Staging (Living Room)'
+                  key='Model Living Room'
+                  gc='2/3'
+                  gr='2/3'
+                  onView={() => this.viewModelLiving()}
+                />
+                <DropdownCategory
+                  name='Virtual Staging (Living Room)'
+                  key='Living Room'
+                  gc='2/3'
+                  gr='3/4'
+                  onView={() => this.viewLiving()}
+                />
+              </DropdownList>
+            </Dropdowns>
+            <i style={{ marginTop: '30px' }}>
+              This UI was created by a programmer and is not representative of
+              the finished product nor of Evolution Virtual's design standards.
+            </i>
+          </>
         )}
-        <i style={{ marginTop: '30px' }}>
-          This UI was created by a programmer and is not representative of the
-          finished product nor of Evolution Virtual's design standards.
-        </i>
       </div>
     );
   }
 }
+
+const Dropdowns = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+`;
 
 const BackButton = styled.button`
   margin-bottom: 10px;
