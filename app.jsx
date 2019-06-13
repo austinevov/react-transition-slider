@@ -25,7 +25,7 @@ class App extends React.Component {
     kitchenRight: 'fluorite',
     bathroomLeft: 'amethyst',
     bathroomRight: 'topaz',
-    isViewingSlider: false,
+    isViewingSlider: true,
     sliderType: 'kitchen'
   };
 
