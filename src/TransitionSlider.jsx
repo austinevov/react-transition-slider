@@ -137,4 +137,5 @@ const Container = styled.div`
     `};
 
   position: relative;
+  overflow: hidden;
 `;
